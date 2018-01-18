@@ -1,0 +1,32 @@
+Sensors
+PIR
+Motion
+Photo-resistor
+
+Photo-resistor
+independent of other 2 sensors
+give user the option to choose in our app (when they adjust the brightness on app, our automatic system turns off)
+time interval to check brightness of room (10min? 30min?)
+concern: placement
+
+  option 1:
+  sensor reads at base line (ex. lights on at full capacity = 100, when sunlight enters room = 115)
+  then reduce brightness of lightbulb to go back down to base line of 
+  concerns:
+  placement of sensor to lightbulb
+  
+  option 2:
+  read when lights are off (reading environment)
+  based on (proposed formula)  
+  concern: whats the base?
+  
+ 
+PIR/Motion
+system off (lights off) motion sensor running
+when lights turn on, motion sensor turns off, PIR turns on, reading if someone is still in the room
+when someone leaves the room, lights turn off, motion turns back on, PIR turns off
+
+
+
+
+
