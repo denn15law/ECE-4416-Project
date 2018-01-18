@@ -1,6 +1,4 @@
-/*
- * PIR sensor tester
- */
+
 char data= 0;
 int ledPin = 9; // choose the pin for the LED
 int inputPin2 = 3;
