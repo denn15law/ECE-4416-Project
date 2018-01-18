@@ -1,0 +1,9 @@
+intialize inputs and pins
+
+loop
+	read motion sensors
+		if on
+		turn on lights
+		if off
+		turn off lights
+end loop
