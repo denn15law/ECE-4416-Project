@@ -1,0 +1,26 @@
+/*
+add         AdjustBrightness ();    to Light_Sensor code
+*/
+
+
+void AdjustBrightness ()
+{
+  analogWrite (ledPin, brightness);           //writes the brightness to pin 9 LED
+  Light_State = analogRead(A5);               //reads current state of light sensor
+  if (Light_State >= 0 && Light_State <= 330) //condiitons for low brightness mode
+  {
+     brightness = 85;                         //set brightness of led to low mode
+     Serial.println("Low Brightness");  
+  }
+  if (Light_State >=331 && Light_State <= 660) //conditions for medium brightness
+  {
+    brightness = 170;
+    Serial.println("Medium Brightness"); 
+  }
+  else                                         //any other sensor will use high mode
+  {
+    brightness = 255;
+    Serial.println("High Brightness"); 
+  }
+  delay(1000);                                //give it a second to adjust
+}
