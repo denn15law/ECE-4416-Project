@@ -1,0 +1,117 @@
+#include "Timer.h"
+int data= 0;
+int ledPin = 9; 
+int inputPin1 = 1;
+int inputPin2 = 2;
+int inputPin3 = 3;
+int PIR_State = LOW;            
+int PIR1 = 0; 
+int PIR2 = 0; 
+int Light_State = 0;
+int brightness = 0;
+int Duration = 10000;
+//Timer t;
+unsigned long currentMillis = 0;
+unsigned long LoopTime = 0;
+void setup() 
+{                                     //initialize variables
+  Serial.begin (9600);
+  pinMode (ledPin, OUTPUT);           //led pins and input pins
+  pinMode (inputPin1, INPUT);
+  pinMode (inputPin2, INPUT);   
+  pinMode (inputPin3, INPUT); 
+}
+
+///////////////////////FUNCTIONS FOR SENSORS AND APP///////////////////////////////
+
+void app() 
+{                                     //Code for app 
+  if(Serial.available()>0)
+  {                                   //reads data and writes to led pin
+  data = Serial.read();
+  Serial.println(data);
+  analogWrite(ledPin, data);
+  
+  }
+}
+
+void Light_Sensor ()
+{                                     //Code for light sensor    
+  Light_State = analogRead(A5);
+  Serial.println(Light_State, DEC);
+  AdjustBrightness ();
+}
+
+void PIR_Sensor ()
+{
+  PIR1 = digitalRead (inputPin2);
+  PIR2 = digitalRead (inputPin3);
+  if (PIR1 == HIGH || PIR2 == HIGH)
+  { 
+    if (PIR_State == LOW)
+    {
+      Serial.println ("Motion Detected");
+      PIR_State = HIGH;
+    }
+      Light_Sensor ();
+  }
+  else 
+  {
+    if (PIR_State == HIGH)
+    {
+      Serial.println ("No Motion");
+      PIR_State = LOW;
+    }
+    LoopTime= millis();
+    currentMillis = millis();
+    while ((PIR1 == LOW && PIR2 == LOW)&& (currentMillis - LoopTime < Duration)){
+      PIR1 = digitalRead (inputPin2);
+      PIR2 = digitalRead (inputPin3);
+      currentMillis = millis();
+      if (PIR1 == HIGH || PIR2 == HIGH)
+      {
+        break;
+      }
+  }
+  analogWrite (ledPin, 0);
+}
+}
+void AdjustBrightness ()
+{
+  analogWrite (ledPin, brightness);           //writes the brightness to pin 9 LED
+  Light_State = analogRead(A5);               //reads current state of light sensor
+  if (Light_State >= 0 && Light_State <= 331) //condiitons for low brightness mode
+  {
+     brightness = 0;                         //set brightness of led to high mode
+     Serial.println("High Brightness");  
+  }
+  else if (Light_State >=331 && Light_State <= 660) //conditions for medium brightness
+  {
+    brightness = 170;
+    Serial.println("Medium Brightness"); 
+  }
+  
+  else                                         //any other sensor will use low mode
+  {
+    brightness = 255;
+    Serial.println("Low Brightness"); 
+  }
+  delay(1000);                                //give it a second to adjust
+}
+///////////////////////////////////////////////////////////////////////////////////
+/*void doSomething()
+{
+  Serial.print("2 second tick: millis()=");
+  Serial.println(millis());
+}
+*/
+
+////////MAIN FUNCTION////////////////////////
+void loop()
+{
+ app ();
+// PIR_Sensor ();
+ /*int tickEvent = t.every(2000, doSomething);
+ t.update();*/
+}
+/////////////////////////////////////////////
